@@ -129,3 +129,32 @@ undoButton.onclick = function () {
   index--;
   ctx.putImageData(restoreArray[index], 0, 0);
 };
+
+// image input
+const imageInput = document.getElementById("image-file");
+imageInput.onchange = function (event) {
+  const file = event.target.files[0];
+  const url = URL.createObjectURL(file);
+  const image = new Image();
+  image.src = url;
+  image.onload = function () {
+    ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    image.value = null;
+  };
+};
+
+// text input
+const textInput = document.getElementById("text-input");
+const onDoubleClick = (event) => {
+  if (!textInput.value) {
+    return;
+  }
+
+  ctx.save();
+  const text = textInput.value;
+  ctx.lineWidth = 1;
+  ctx.font = "48px serif";
+  ctx.fillText(text, event.offsetX, event.offsetY);
+  ctx.restore();
+};
+canvas.addEventListener("dblclick", onDoubleClick);
