@@ -158,3 +158,13 @@ const onDoubleClick = (event) => {
   ctx.restore();
 };
 canvas.addEventListener("dblclick", onDoubleClick);
+
+// save image
+const saveButton = document.getElementById("image-save");
+saveButton.onclick = function () {
+  const url = canvas.toDataURL();
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "myDrawing.png";
+  a.click();
+};
