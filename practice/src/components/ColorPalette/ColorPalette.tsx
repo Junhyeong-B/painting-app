@@ -36,7 +36,7 @@ const ColorPalette = () => {
 export default ColorPalette;
 
 const containerCss = css`
-  width: 100px;
+  width: 120px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
