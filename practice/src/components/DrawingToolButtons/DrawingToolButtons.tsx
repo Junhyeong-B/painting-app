@@ -1,4 +1,5 @@
-import { css } from '@emotion/css';
+import { useState } from 'react';
+import { css, cx } from '@emotion/css';
 import {
   BsPencil,
   BsEraser,
@@ -18,33 +19,44 @@ import { tools } from './constants';
 const getIcon = (tool: ToolType) => {
   switch (tool) {
     case 'pencil':
-      return <BsPencil />;
+      return <BsPencil size={20} />;
     case 'eraser':
-      return <BsEraser />;
+      return <BsEraser size={20} />;
     case 'square':
-      return <BsSquare />;
+      return <BsSquare size={20} />;
     case 'circle':
-      return <BsCircle />;
+      return <BsCircle size={20} />;
     case 'square-fill':
-      return <BsSquareFill />;
+      return <BsSquareFill size={20} />;
     case 'circle-fill':
-      return <BsCircleFill />;
+      return <BsCircleFill size={20} />;
     case 'paint':
-      return <BsPaintBucket />;
+      return <BsPaintBucket size={20} />;
     case 'undo':
-      return <BsArrow90DegLeft />;
+      return <BsArrow90DegLeft size={20} />;
     default:
       return null;
   }
 };
 
 const DrawingToolButtons = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const { setTool } = useToolStore();
+
+  const onClickTool = (tool: ToolType, index: number) => {
+    setTool(tool);
+    setCurrentIndex(index);
+  };
 
   return (
     <div className={containerCss}>
-      {tools.map((tool) => (
-        <Button key={tool} onClick={setTool.bind(null, tool)} full>
+      {tools.map((tool, index) => (
+        <Button
+          key={tool}
+          onClick={onClickTool.bind(null, tool, index)}
+          className={cx({ [selectedButtonCss]: index === currentIndex })}
+          full
+        >
           {getIcon(tool)}
         </Button>
       ))}
@@ -60,4 +72,8 @@ const containerCss = css`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
+`;
+
+const selectedButtonCss = css`
+  background-color: aliceblue;
 `;

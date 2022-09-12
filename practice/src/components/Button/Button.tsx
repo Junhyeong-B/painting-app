@@ -1,10 +1,11 @@
-import { css } from '@emotion/css';
+import { css, cx } from '@emotion/css';
 import { MouseEventHandler, PropsWithChildren } from 'react';
 
 interface Props {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   color?: string;
   full?: boolean;
+  className?: string;
 }
 
 const Button = ({
@@ -12,9 +13,13 @@ const Button = ({
   children,
   color,
   full,
+  className,
 }: PropsWithChildren<Props>) => {
   return (
-    <button onClick={onClick} className={containerCss(color, full)}>
+    <button
+      onClick={onClick}
+      className={cx(containerCss(color, full), className)}
+    >
       {children}
     </button>
   );

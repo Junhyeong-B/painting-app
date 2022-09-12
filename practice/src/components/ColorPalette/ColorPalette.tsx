@@ -6,7 +6,7 @@ import { useColorStore } from 'store/index';
 import { ChangeEvent, useState } from 'react';
 
 const ColorPalette = () => {
-  const [pickedColor, setPickedColor] = useState('#000');
+  const [pickedColor, setPickedColor] = useState('#000000');
   const { setColor } = useColorStore();
 
   const onChangeColorInput = (e: ChangeEvent<HTMLInputElement>) => {
