@@ -2,12 +2,12 @@ import { css } from '@emotion/css';
 import Button from 'components/Button';
 
 import { palette } from './constants';
-import { useColorStore } from 'store/index';
+import useDrawStore from 'store';
 import { ChangeEvent, useState } from 'react';
 
 const ColorPalette = () => {
   const [pickedColor, setPickedColor] = useState('#000000');
-  const { setColor } = useColorStore();
+  const { color, setColor } = useDrawStore();
 
   const onChangeColorInput = (e: ChangeEvent<HTMLInputElement>) => {
     setPickedColor(e.currentTarget.value);
@@ -15,25 +15,47 @@ const ColorPalette = () => {
   };
 
   return (
-    <div className={containerCss}>
-      {palette.map((color) => (
-        <Button
-          key={color}
-          color={color}
-          onClick={setColor.bind(null, color)}
+    <div>
+      <div className={currentColorContainerCss}>
+        <div>현재 컬러:</div>
+        <div className={currentColorCss(color)} />
+      </div>
+      <div className={containerCss}>
+        {palette.map((color) => (
+          <Button
+            key={color}
+            color={color}
+            onClick={setColor.bind(null, color)}
+          />
+        ))}
+        <input
+          type="color"
+          className={colorPicker}
+          value={pickedColor}
+          onChange={onChangeColorInput}
         />
-      ))}
-      <input
-        type="color"
-        className={colorPicker}
-        value={pickedColor}
-        onChange={onChangeColorInput}
-      />
+      </div>
     </div>
   );
 };
 
 export default ColorPalette;
+
+const currentColorContainerCss = css`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+const currentColorCss = (color: string) => css`
+  width: 30px;
+  height: 30px;
+  border-radius: 3px;
+  border: 2px solid;
+  box-sizing: border-box;
+  background-color: ${color};
+`;
 
 const containerCss = css`
   width: 120px;

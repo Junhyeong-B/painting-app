@@ -2,11 +2,21 @@ import { useRef } from 'react';
 
 import { css } from '@emotion/css';
 import { useDraw } from 'components/hooks/useDraw';
+import useDrawStore from 'store';
 
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { tool } = useDrawStore();
+  const { startDrawing, endDrawing, drawLine, drawSquare } = useDraw(canvasRef);
 
-  const { startDrawing, endDrawing, drawLine } = useDraw(canvasRef);
+  const drawCanvas = (() => {
+    switch (tool) {
+      case 'square':
+        return drawSquare;
+      case 'pencil':
+        return drawLine;
+    }
+  })();
 
   return (
     <canvas
@@ -14,7 +24,7 @@ const Canvas = () => {
       height={500}
       className={containerCss}
       ref={canvasRef}
-      onMouseMove={drawLine}
+      onMouseMove={drawCanvas}
       onMouseDown={startDrawing}
       onMouseUp={endDrawing}
       onMouseLeave={endDrawing}

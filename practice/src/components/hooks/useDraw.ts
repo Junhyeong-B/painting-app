@@ -1,18 +1,10 @@
 import React, { useState } from 'react';
-import { useColorStore, useToolStore } from 'store';
+import useDrawStore from 'store';
 
 export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
   const [isDrawing, setIsDrawing] = useState(false);
-  const { color } = useColorStore();
-  const { tool } = useToolStore();
-
-  // const getCoordinate = (e: React.MouseEvent<HTMLCanvasElement>) => {
-
-  //   return {
-  //     x: e.clientX - ref.current.offsetLeft,
-  //     y: e.clientY - ref.current.offsetTop,
-  //   }
-  // }
+  const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
+  const { color, range } = useDrawStore();
 
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!ref.current) {
@@ -28,6 +20,7 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
 
     context.beginPath();
     context.moveTo(x, y);
+    setStartPosition({ x, y });
     setIsDrawing(true);
   };
 
@@ -58,7 +51,7 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
     context.strokeStyle = color;
     context.lineJoin = 'round';
     context.lineCap = 'round'
-    context.lineWidth = 5;
+    context.lineWidth = range;
 
     const x = e.clientX - ref.current.offsetLeft;
     const y = e.clientY - ref.current.offsetTop;
@@ -67,9 +60,33 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
     context.stroke();
   };
 
+  const drawSquare = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDrawing || !ref.current) {
+      return;
+    }
+    const context = ref.current.getContext('2d');
+
+    if (!context) {
+      return;
+    }
+
+    context.strokeStyle = color;
+    context.lineJoin = 'round';
+    context.lineCap = 'round'
+    context.lineWidth = range;
+
+    const nextX = e.clientX - ref.current.offsetLeft;
+    const nextY = e.clientY - ref.current.offsetTop;
+    const { x, y } = startPosition;
+
+    // TODO 이전 사각형 지우기
+    context.strokeRect(x, y, nextX - x, nextY - y);
+  }
+
   return {
     startDrawing,
     endDrawing,
     drawLine,
+    drawSquare,
   };
 };

@@ -13,7 +13,7 @@ import {
 
 import Button from 'components/Button';
 
-import useToolStore, { ToolType } from 'store/tool';
+import useDrawStore, { ToolType } from 'store';
 import { tools } from './constants';
 
 const getIcon = (tool: ToolType) => {
@@ -41,7 +41,7 @@ const getIcon = (tool: ToolType) => {
 
 const DrawingToolButtons = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { setTool } = useToolStore();
+  const { setTool } = useDrawStore();
 
   const onClickTool = (tool: ToolType, index: number) => {
     setTool(tool);
@@ -75,5 +75,5 @@ const containerCss = css`
 `;
 
 const selectedButtonCss = css`
-  background-color: aliceblue;
+  background-color: #ff1e0076;
 `;
