@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 import { css } from '@emotion/css';
-import { useDraw } from 'components/hooks/useDraw';
+import { useDraw } from 'hooks/useDraw';
 import useDrawStore from 'store';
 
 const Canvas = () => {
