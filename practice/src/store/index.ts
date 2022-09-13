@@ -1,2 +1,2 @@
-export { default as useColorStore } from './color'
-export { default as useToolStore } from './tool'
+export { default } from './store';
+export { type ToolType } from './store';
