@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import useDrawStore from 'store';
 
+const BG_COLOR = "white";
+
 export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
@@ -40,7 +42,10 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
     context.closePath();
   };
 
-  const drawLine = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const drawLine = (
+    e: React.MouseEvent<HTMLCanvasElement>,
+    options?: { color?: string; range?: number }
+  ) => {
     if (!isDrawing || !ref.current) {
       return;
     }
@@ -50,10 +55,10 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
       return;
     }
 
-    context.strokeStyle = color;
+    context.strokeStyle = options?.color ?? color;
     context.lineJoin = 'round';
     context.lineCap = 'round';
-    context.lineWidth = range;
+    context.lineWidth = options?.range ?? range;
 
     const x = e.clientX - ref.current.offsetLeft;
     const y = e.clientY - ref.current.offsetTop;
@@ -88,10 +93,15 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
     context.strokeRect(x, y, nextX - x, nextY - y);
   }
 
+  const eraser = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    drawLine(e, { color: BG_COLOR, range: 40 });
+  }
+
   return {
     startDrawing,
     endDrawing,
     drawLine,
     drawSquare,
+    eraser,
   };
 };

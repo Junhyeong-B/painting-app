@@ -7,7 +7,8 @@ import useDrawStore from 'store';
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { tool } = useDrawStore();
-  const { startDrawing, endDrawing, drawLine, drawSquare } = useDraw(canvasRef);
+  const { startDrawing, endDrawing, drawLine, drawSquare, eraser } =
+    useDraw(canvasRef);
 
   const drawCanvas = (() => {
     switch (tool) {
@@ -15,6 +16,9 @@ const Canvas = () => {
         return drawSquare;
       case 'pencil':
         return drawLine;
+      case 'eraser':
+        return eraser;
+      default:
     }
   })();
 
