@@ -5,6 +5,7 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const { color, range } = useDrawStore();
+  const [prevCanvasImage, setPrevCanvasImage] = useState<ImageData>();
 
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!ref.current) {
@@ -22,6 +23,7 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
     context.moveTo(x, y);
     setStartPosition({ x, y });
     setIsDrawing(true);
+    setPrevCanvasImage(context.getImageData(0, 0, ref.current.width, ref.current.height))
   };
 
   const endDrawing = () => {
@@ -50,7 +52,7 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
 
     context.strokeStyle = color;
     context.lineJoin = 'round';
-    context.lineCap = 'round'
+    context.lineCap = 'round';
     context.lineWidth = range;
 
     const x = e.clientX - ref.current.offsetLeft;
@@ -72,14 +74,17 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
 
     context.strokeStyle = color;
     context.lineJoin = 'round';
-    context.lineCap = 'round'
+    context.lineCap = 'round';
     context.lineWidth = range;
 
     const nextX = e.clientX - ref.current.offsetLeft;
     const nextY = e.clientY - ref.current.offsetTop;
     const { x, y } = startPosition;
 
-    // TODO 이전 사각형 지우기
+    context.clearRect(0, 0, ref.current.width, ref.current.height);
+    if (prevCanvasImage) {
+      context.putImageData(prevCanvasImage, 0, 0);
+    }
     context.strokeRect(x, y, nextX - x, nextY - y);
   }
 
