@@ -67,7 +67,7 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
     context.stroke();
   };
 
-  const drawSquare = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const drawSquare = (e: React.MouseEvent<HTMLCanvasElement>, fill?: boolean) => {
     if (!isDrawing || !ref.current) {
       return;
     }
@@ -78,6 +78,7 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
     }
 
     context.strokeStyle = color;
+    context.fillStyle = color;
     context.lineJoin = 'round';
     context.lineCap = 'round';
     context.lineWidth = range;
@@ -90,7 +91,16 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
     if (prevCanvasImage) {
       context.putImageData(prevCanvasImage, 0, 0);
     }
-    context.strokeRect(x, y, nextX - x, nextY - y);
+
+    if (fill) {
+      context.fillRect(x, y, nextX - x, nextY - y)
+    } else {
+      context.strokeRect(x, y, nextX - x, nextY - y);
+    }
+  }
+
+  const drawFillSquare = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    drawSquare(e, true)
   }
 
   const eraser = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -102,6 +112,7 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
     endDrawing,
     drawLine,
     drawSquare,
+    drawFillSquare,
     eraser,
   };
 };
