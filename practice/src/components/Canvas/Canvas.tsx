@@ -14,6 +14,7 @@ const Canvas = () => {
     drawSquare,
     drawFillSquare,
     eraser,
+    drawCircle,
   } = useDraw(canvasRef);
 
   const drawCanvas = (() => {
@@ -26,6 +27,8 @@ const Canvas = () => {
         return drawLine;
       case 'eraser':
         return eraser;
+      case 'circle':
+        return drawCircle;
       default:
     }
   })();

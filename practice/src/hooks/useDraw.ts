@@ -107,6 +107,33 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
     drawLine(e, { color: BG_COLOR, range: 40 });
   }
 
+  const drawCircle = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDrawing || !ref.current) {
+      return;
+    }
+    const context = ref.current.getContext('2d');
+
+    if (!context) {
+      return;
+    }
+
+    context.strokeStyle = color;
+    context.fillStyle = color;
+    context.lineJoin = 'round';
+    context.lineCap = 'round';
+    context.lineWidth = range;
+
+    const r = (e.clientX - ref.current.offsetLeft) / 2;
+    const { x, y } = startPosition;
+
+    context.arc(x, y, r, 0, Math.PI * 2);
+    context.clearRect(0, 0, ref.current.width, ref.current.height);
+    if (prevCanvasImage) {
+      context.putImageData(prevCanvasImage, 0, 0);
+    }
+    context.stroke();
+  }
+
   return {
     startDrawing,
     endDrawing,
@@ -114,5 +141,6 @@ export const useDraw = (ref: React.RefObject<HTMLCanvasElement>) => {
     drawSquare,
     drawFillSquare,
     eraser,
+    drawCircle,
   };
 };
